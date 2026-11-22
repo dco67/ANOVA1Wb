@@ -1,0 +1,43 @@
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{graphicx}
+% Numéros sans point final : « Figure 1.1 : »
+\KOMAoptions{numbers=noenddot}
+% Encadrés « Dans l'application » et « Cas fil rouge » (filtre encadres.lua)
+\usepackage[most]{tcolorbox}
+\definecolor{appfond}{HTML}{FFF8E9}\definecolor{appbord}{HTML}{D9A53B}
+\definecolor{casfond}{HTML}{F6F9FC}\definecolor{casbord}{HTML}{137983}
+\newtcolorbox{encadreapp}{enhanced, breakable, frame hidden, boxrule=0pt, sharp corners,
+  colback=appfond, borderline west={3pt}{0pt}{appbord}, left=8pt, right=6pt, top=5pt, bottom=5pt,
+  before skip=8pt, after skip=8pt}
+\newtcolorbox{encadrecas}{enhanced, breakable, frame hidden, boxrule=0pt, sharp corners,
+  colback=casfond, borderline west={3pt}{0pt}{casbord}, left=8pt, right=6pt, top=5pt, bottom=5pt,
+  before skip=8pt, after skip=8pt}
+% Caractères Unicode absents de Latin Modern hors formules : dessinés par LaTeX
+\usepackage{newunicodechar}
+\newunicodechar{▸}{\ensuremath{\blacktriangleright}}
+\newunicodechar{₀}{\textsubscript{0}}
+\newunicodechar{₁}{\textsubscript{1}}
+\newunicodechar{ᵢ}{\textsubscript{i}}
+\newunicodechar{ᵉ}{\textsuperscript{e}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{μ}{\ensuremath{\mu}}
+\newunicodechar{η}{\ensuremath{\eta}}
+\newunicodechar{ω}{\ensuremath{\omega}}
+\newunicodechar{α}{\ensuremath{\alpha}}
+\newunicodechar{ψ}{\ensuremath{\psi}}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{χ}{\ensuremath{\chi}}
+\newunicodechar{Σ}{\ensuremath{\Sigma}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{≤}{\ensuremath{\leq}}
+\newunicodechar{√}{\ensuremath{\surd}}
+\newunicodechar{🎲}{\ifdefined\faDice\faDice\fi}
+% La couverture (cover.tex) tient lieu de page de titre
+\renewcommand{\maketitle}{}
+% Numéros de sections à deux chiffres dans la table des matières
+\RedeclareSectionCommand[tocnumwidth=2.9em]{section}
+\RedeclareSectionCommand[tocindent=2.9em,tocnumwidth=3.4em]{subsection}

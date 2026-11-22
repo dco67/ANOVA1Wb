@@ -1,0 +1,11 @@
+%% Source Mermaid de images/arbre-decision.png (rendu une fois, puis inclus comme image)
+flowchart TD
+  P["Plan : groupes indépendants, Y quantitative?"] -->|non| M["Autre modèle : mesures répétées, multiniveau, logistique"]
+  P -->|oui| V["Variances homogènes, ou groupes égaux et rapport des écarts-types modéré?"]
+  V -->|oui| C["F classique"]
+  V -->|non| W["Welch"]
+  C --> Q["Question d'après-test?"]
+  W --> GH["Games-Howell"]
+  Q -->|toutes les paires| T["Tukey HSD ou Holm"]
+  Q -->|hypothèses formulées d'avance| K["Contrastes planifiés"]
+  Q -->|niveaux ordonnés| TP["Tendance polynomiale"]

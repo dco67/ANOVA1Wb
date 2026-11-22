@@ -1,0 +1,89 @@
+project:
+  type: book
+  output-dir: _site
+
+lang: fr
+language:
+  crossref-fig-title: "Figure"
+  crossref-tbl-title: "Tableau"
+  crossref-fig-prefix: "figure"
+  crossref-tbl-prefix: "tableau"
+  crossref-eq-prefix: "équation"
+  crossref-ch-prefix: "chapitre"
+  crossref-sec-prefix: "section"
+  title-block-author-single: "Auteur"
+
+book:
+  title: "Analyse de la variance (ANOVA)"
+  subtitle: "Comprendre, concevoir, tester et interpréter la comparaison de moyennes"
+  author: "Daniel Coulombe"
+  date: "2026"
+  search: true
+  page-navigation: true
+  downloads: [pdf, epub]
+  chapters:
+    - index.qmd
+    - part: "Comprendre"
+      chapters:
+        - 01-reperes.qmd
+        - 02-concevoir.qmd
+        - 03-decomposer.qmd
+    - part: "Analyser"
+      chapters:
+        - 04-produire-lire.qmd
+        - 05-postulats.qmd
+        - 06-inference.qmd
+    - part: "Approfondir"
+      chapters:
+        - 07-comparaisons.qmd
+        - 08-contrastes.qmd
+        - 09-effet-puissance.qmd
+    - part: "Pratiquer"
+      chapters:
+        - 10-laboratoire.qmd
+        - decider-rapporter.qmd
+        - 11-exercices.qmd
+    - 12-glossaire.qmd
+    - references.qmd
+
+bibliography: references.bib
+csl: chicago-fr.csl
+nocite: '@*'
+title-block: false
+
+crossref:
+  chapters: true
+
+filters:
+  - encadres.lua
+
+execute:
+  freeze: auto
+  echo: false
+  warning: false
+  message: false
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    fig-align: center
+  pdf:
+    documentclass: scrreprt
+    pdf-engine: lualatex
+    toc: false
+    number-sections: true
+    colorlinks: true
+    fig-align: center
+    include-before-body: cover.tex
+    geometry:
+      - margin=2.5cm
+    include-in-header: preamble.tex
+  epub:
+    toc: true
+    cover-image: images/cover.png
+    number-sections: true
+    css: styles.css

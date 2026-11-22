@@ -1,0 +1,147 @@
+# Exercices et corrigés {#sec-exercices}
+
+```{r}
+#| include: false
+source("_common.R")
+n4 <- n_requis(0.25, 4)
+```
+
+Les exercices suivent l'ordre du manuel. Les quatre premiers portent sur le raisonnement; les suivants demandent des calculs que l'on peut faire avec une calculatrice, puis vérifier dans l'application lorsque c'est indiqué.
+
+## Exercice 1 : reconnaître le plan
+
+Une chercheuse compare le score moyen de stress de personnes recrutées dans trois quartiers. Chaque personne répond une fois. Peut-elle conclure que le quartier cause le niveau de stress si l'ANOVA est significative? Quelle information manque pour une interprétation causale?
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+L'ANOVA est calculable : un facteur à trois groupes et une variable dépendante quantitative. Mais les quartiers sont des groupes naturels; composition sociodémographique, exposition et sélection résidentielle peuvent expliquer la différence. Une conclusion prudente porte sur une association entre quartier et score moyen, non sur un effet causal du quartier. Il faudrait une assignation aléatoire, impossible ici, ou une stratégie crédible de contrôle des facteurs de confusion.
+:::
+
+## Exercice 2 : interpréter une décomposition
+
+Dans un scénario, les moyennes de trois groupes sont très éloignées mais les observations de chaque groupe sont très dispersées. Quelle composante, inter ou intra, est nécessairement grande? Pourquoi ne peut-on pas conclure d'avance que $F$ sera significatif?
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+L'éloignement des moyennes rend la composante inter importante; la dispersion rend aussi la composante intra importante. $F$ compare les carrés moyens associés à ces deux sources. Un grand numérateur ne garantit donc pas un grand rapport si le dénominateur est lui aussi grand, surtout avec un effectif limité. Le laboratoire 2 du chapitre [-@sec-laboratoire] l'illustre.
+:::
+
+## Exercice 3 : choisir la suite
+
+Levene suggère des variances inégales; les tailles de groupes sont très différentes. Welch est significatif. Quelle famille de comparaisons par paires choisissez-vous? Pourquoi Tukey n'est-il pas le choix naturel ici?
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+Games-Howell (ou Tamhane T2, Dunnett T3) : il n'impose pas une variance commune et s'accorde avec le raisonnement de Welch. Tukey HSD repose sur l'estimation groupée de l'erreur, $CM_R$, et vise le contexte de variances homogènes, précisément le postulat écarté.
+:::
+
+## Exercice 4 : construire un contraste
+
+Quatre doses sont comparées. Vous voulez opposer la moyenne des doses faibles (1 et 2) à la moyenne des doses fortes (3 et 4). Proposez un contraste dont la somme des coefficients est nulle. Comment l'interpréteriez-vous?
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+$(-1,-1,1,1)$ convient, ou $(-\tfrac12,-\tfrac12,\tfrac12,\tfrac12)$ pour que $\hat\psi$ soit directement l'écart entre les deux moyennes de doses. Il compare la moyenne des deux doses fortes à celle des deux doses faibles; un multiple constant donne le même test. Les coefficients doivent être décidés avant de consulter les données si l'on veut le traiter comme un contraste planifié. Si les doses sont équidistantes, la tendance linéaire $(-3,-1,1,3)$ serait une autre façon, plus précise, de poser la question.
+:::
+
+## Exercice 5 : compléter un tableau ANOVA
+
+Une étude compare quatre groupes de 12 personnes. Complétez le tableau, puis concluez au seuil de 0,05 (la valeur critique de $F(3, 44)$ est 2,82).
+
+| Source | SC | ddl | CM | $F$ |
+|:--|--:|--:|--:|--:|
+| Entre groupes | ? | ? | 40 | ? |
+| Résiduelle | 352 | ? | ? | |
+| Totale | ? | ? | | |
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+$N=48$, $k=4$ : $ddl_E=3$, $ddl_R=44$, $ddl_T=47$. SCE $=40\times3=120$; $CM_R=352/44=8$; $F=40/8=5$; SCT $=120+352=472$. Comme $5>2{,}82$, on rejette $H_0$. Taille d'effet : $\eta^2=120/472=0{,}254$ et $\omega^2=(120-3\times8)/(472+8)=0{,}200$.
+:::
+
+## Exercice 6 : espérance des carrés moyens
+
+Trois groupes de 20 personnes; dans la population, $\sigma=8$ et les moyennes valent 30, 30 et 36. Calculez $E(CM_R)$ et $E(CM_E)$. Quel $F$ « typique » peut-on attendre?
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+$\mu=32$; effets $-2$, $-2$, $+4$. $\sum n_i\tau_i^2=20(4+4+16)=480$. $E(CM_R)=64$ et $E(CM_E)=64+480/2=304$. Le rapport des espérances, $304/64\approx4{,}75$, donne l'ordre de grandeur de $F$ (la moyenne exacte de $F$ est un peu différente, car l'espérance d'un rapport n'est pas le rapport des espérances). On peut le vérifier dans l'application en tirant plusieurs échantillons de ce scénario.
+:::
+
+## Exercice 7 : Holm à la main
+
+Une étude à quatre groupes produit six valeurs $p$ brutes : 0,001, 0,008, 0,012, 0,030, 0,045 et 0,400. Calculez les $p$ ajustés de Holm. Quelles comparaisons restent significatives au seuil de 0,05? Combien le seraient avec Bonferroni?
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+Multiplicateurs 6, 5, 4, 3, 2, 1 : 0,006, 0,040, 0,048, 0,090, 0,090, 0,400 (la cinquième valeur, $0{,}045\times2=0{,}090$, et la sixième, 0,400, respectent déjà l'ordre croissant). Trois comparaisons restent significatives avec Holm. Avec Bonferroni (tout multiplier par 6) : 0,006, 0,048, 0,072... seulement deux. Holm est au moins aussi puissant que Bonferroni, ici strictement plus.
+:::
+
+## Exercice 8 : quel test global?
+
+Pour chaque situation, choisissez entre le $F$ classique, Welch et Kruskal-Wallis, en une phrase.
+
+a. Trois groupes de 40, écarts-types 9, 11 et 10, distributions symétriques.
+b. Groupes de 15, 30 et 60; écarts-types 20, 12 et 8.
+c. Y est un classement de préférence de 1 à 5; groupes de 12.
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+a. $F$ classique : groupes égaux, rapport des écarts-types de 1,22.
+b. Welch : le plus petit groupe est le plus dispersé (rapport 2,5), la configuration où le $F$ classique devient trop libéral.
+c. Kruskal-Wallis : Y est ordinale avec peu de valeurs possibles, et les groupes sont petits; on l'interprète comme une comparaison de distributions.
+:::
+
+## Exercice 9 : orthogonalité avec des groupes inégaux
+
+Trois groupes de tailles 10, 20 et 30. Les contrastes $c=(1,-1,0)$ et $d=(1,1,-2)$ sont-ils orthogonaux? Et avec trois groupes de 20?
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+Avec des tailles inégales, on calcule $\sum c_id_i/n_i=1/10-1/20+0=0{,}05\neq0$ : ils ne sont pas orthogonaux, et leurs sommes de carrés ne s'additionnent pas pour donner SCE. Avec trois groupes de 20, $\sum c_id_i/n_i=(1-1+0)/20=0$ : ils le sont. L'application tient compte des effectifs dans sa vérification.
+:::
+
+## Exercice 10 : planifier l'effectif
+
+On prépare une étude à quatre groupes. Le plus petit effet jugé utile correspond à $f=0{,}25$. Quelle taille par groupe faut-il pour une puissance de 0,80 au seuil de 0,05? Que se passe-t-il si l'effet réel n'est que de $f=0{,}15$?
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+Il faut `r n4` personnes par groupe (`r 4 * n4` au total); l'application le donne dans **Taille d'effet & Puissance** avec $k=4$ et **f de Cohen cible** = 0,25. Si l'effet réel n'est que de 0,15, la puissance de ce plan tombe à environ `r fr(puissance(n4, 0.15, 4), 2)` : l'étude manquerait l'effet plus d'une fois sur deux. C'est pourquoi on planifie pour le plus petit effet **utile**, pas pour l'effet espéré.
+:::
+
+## Exercice 11 : lire une sortie complète
+
+Une analyse rapporte : « $F(2, 147)=3{,}21$, $p=0{,}043$, $\eta^2=0{,}042$, $\omega^2=0{,}029$; Tukey : seule la paire 1 et 3 diffère ($p=0{,}036$). » Rédigez deux phrases d'interprétation prudentes.
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+« Les moyennes différaient selon la condition, mais l'effet était modeste : la condition expliquait environ 3 % de la variabilité des scores ($\omega^2=0{,}029$). Seuls les groupes 1 et 3 se distinguaient selon Tukey; l'écart entre ces deux groupes, dans les unités de la mesure, doit être rapporté avec son intervalle pour juger de son importance pratique. » La valeur $p$ proche de 0,05 invite aussi à la prudence quant à la reproductibilité.
+:::
+
+## Exercice 12 : prédire avant de cliquer
+
+Partez du cas fil rouge. Pour chaque modification, prédisez le sens de variation de SCE, de $CM_R$ et de $F$, puis vérifiez dans l'application (graine 2026).
+
+a. La moyenne du Groupe C passe de 60 à 65.
+b. Tous les écarts-types passent de 10 à 5.
+c. $n$ passe de 30 à 60 par groupe.
+
+::: {.callout-tip collapse="true"}
+## Corrigé
+
+a. SCE augmente (de 1 941,54 à 4 330,21); $CM_R$ ne change pas (mêmes écarts individuels); $F$ passe de 9,75 à 21,73.
+b. $CM_R$ est divisé par 4 exactement (de 99,61 à 24,90, puisque chaque écart individuel est divisé par 2); SCE diminue un peu (de 1 941,54 à 1 718,22), car la part d'erreur d'échantillonnage des moyennes diminue elle aussi; $F$ passe de 9,75 à 34,50.
+c. $CM_R$ reste proche de 100 (96,31); SCE grandit (5 075,56), car elle est proportionnelle à $n$ pour des écarts de moyennes donnés; $F$ passe à 26,35. Attention : avec $n=60$, la graine 2026 produit en grande partie un nouvel échantillon. Seules les 30 premières observations du Groupe A sont celles du cas fil rouge; les groupes suivants puisent plus loin dans la suite aléatoire.
+:::

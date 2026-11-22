@@ -1,0 +1,135 @@
+# Laboratoire guidé dans l'application {#sec-laboratoire}
+
+```{r}
+#| include: false
+source("_common.R")
+l1 <- lab1; l1_a <- lab1_a; tk1 <- tukey(l1); lev1 <- levene_med(l1)
+l2 <- simuler(mu = c(50, 50, 60), sd = rep(20, 3)); l2_a <- anova_1f(l2); tk2 <- tukey(l2)
+f1 <- sqrt(mean((c(50, 50, 60) - 160 / 3)^2)) / 10
+lev_het <- levene_med(het); w_het <- welch(het); gh <- games_howell(het)
+c1 <- contraste(fil, c(-1, -1, 2)); tk_fil <- tukey(fil)
+pp <- function(p) if (p < 0.001) "< 0,001" else fr(p, 3)
+```
+
+Ce laboratoire met en relation les paramètres, les graphiques et les décisions analytiques. Gardez la même graine à l'intérieur d'un exercice. Consignez vos prédictions **avant** d'ouvrir le résultat : l'écart entre la prédiction et le résultat est ce qui fait apprendre. Toutes les réponses supposent la graine 2026; avec une autre graine, les nombres changent, mais les conclusions de fond restent les mêmes la plupart du temps.
+
+## Générer des données appropriées avec l'application
+
+Le panneau de gauche est un générateur de scénarios. Entrez les paramètres du tableau, vérifiez que la case **Graine** contient 2026, puis parcourez les onglets indiqués. Ces réglages servent à apprendre une méthode; ils ne sont pas des seuils universels.
+
+| Scénario | Réglages | Ce que l'on apprend |
+|:--|:--|:--|
+| Pas d'effet | $k=3$, $n=30$, $\mu=(50,50,50)$, $\sigma=(10,10,10)$ | $F$ fluctue autour de 1; une valeur $p$ non significative n'est pas une preuve d'égalité exacte |
+| Effet net et régulier (cas fil rouge) | $k=3$, $n=30$, $\mu=(50,54,60)$, $\sigma=(10,10,10)$ | SCE, $F$, $\omega^2$ et puissance; Tukey devient naturel |
+| Variances inégales | $k=3$, tailles **20; 30; 45**, $\mu=(50,54,60)$, $\sigma=(18,10,6)$ | Levene, Welch et Games-Howell forment un parcours cohérent |
+| Niveaux ordonnés | VI quantitative, $k=4$, $n=30$, $\mu=(45,50,55,60)$, $\sigma=10$ | Le contraste linéaire et l'analyse de tendance répondent mieux que toutes les paires |
+
+: Les scénarios du laboratoire. {#tbl-scenarios}
+
+Pour obtenir les tailles inégales du troisième scénario, inscrivez **20; 30; 45** dans **Ou tailles précises (ex. 20; 30; 45)**. Le curseur **Déséquilibre aléatoire ± n** produit lui aussi des tailles inégales, mais tirées au hasard : utile pour explorer, moins pour reproduire un scénario précis. L'essentiel est que le groupe le plus petit demeure le plus variable. Notez toujours les tailles réellement générées dans votre compte rendu.
+
+## Laboratoire 1 : une différence nette
+
+Réglez $k=3$, $n=30$ par groupe, écarts-types égaux à 10 et moyennes 50, 50 et 60 (graine 2026).
+
+1. Dans **Conception**, expliquez pourquoi $V_{\text{inter}}$ augmente par rapport au scénario sans effet.
+2. Dans **Données simulées**, décrivez centre et dispersion sans citer $p$.
+3. Dans **Postulats**, vérifiez que rien n'appelle une méthode robuste.
+4. Dans **Tableau ANOVA**, rapportez $F$, les degrés de liberté, $p$ et $\omega^2$.
+5. Dans **A posteriori**, utilisez Tukey et décrivez les paires qui diffèrent.
+
+Vous pouvez aussi réaliser d'abord la version du **cas fil rouge** (moyennes 50, 54, 60). La procédure est identique, mais le contraste entre les deux premiers groupes y est moins net.
+
+::: {.callout-tip collapse="true"}
+## Résultats attendus
+
+1. Les moyennes ne sont plus égales : $V_{\text{inter}}=\tfrac13[(50-53{,}33)^2\times2+(60-53{,}33)^2]=22{,}22$, soit 18,2 % de la variance totale (contre 0 sans effet).
+2. Moyennes `r fr(l1_a$m[1])`, `r fr(l1_a$m[2])` et `r fr(l1_a$m[3])`; écarts-types `r fr(l1_a$s[1])`, `r fr(l1_a$s[2])`, `r fr(l1_a$s[3])`. Le Groupe C se détache nettement des deux autres, qui sont presque confondus.
+3. Levene : $`r pvm(lev1[["Pr(>F)"]])`$ (les écarts individuels sont ceux du cas fil rouge); rapport des écarts-types `r fr(max(l1_a$s) / min(l1_a$s))`. L'ANOVA classique convient.
+4. $F(2, 87)=`r frm(l1_a$F)`$, $`r pvm(l1_a$p)`$, $\omega^2=`r frm(l1_a$omega2, 3)`$.
+5. Tukey : A et B ne diffèrent pas ($p=`r frm(tk1$p[1], 3)`$); C diffère de A ($p$ `r pp(tk1$p[2])`) et de B ($p$ `r pp(tk1$p[3])`). Le Groupe C se distingue de deux groupes équivalents.
+:::
+
+## Laboratoire 2 : même écart, plus de bruit
+
+Conservez les moyennes du laboratoire 1 et doublez tous les écarts-types (20).
+
+1. Que devient $V_{\text{intra}}$ dans l'onglet **Conception**?
+2. Prédisez l'effet sur $CM_R$, $F$ et la puissance.
+3. Vérifiez si la conclusion change; si elle ne change pas, expliquez pourquoi la preuve est tout de même devenue moins nette.
+
+::: {.callout-tip collapse="true"}
+## Résultats attendus
+
+1. $V_{\text{intra}}$ passe de 100 à 400; la part de la variance due aux groupes chute de 18,2 % à 5,3 %, et $f$ passe de `r fr(f1)` à `r fr(f1 / 2)`.
+2. $CM_R$ est multiplié par 4 (`r fr(l2_a$cmr)` au lieu de `r fr(l1_a$cmr)`); $F$ diminue fortement; la puissance passe de `r fr(puissance(30, f1, 3), 2)` à `r fr(puissance(30, f1 / 2, 3), 2)`.
+3. Avec la graine 2026, le test global reste significatif : $F(2, 87)=`r frm(l2_a$F)`$, $`r pvm(l2_a$p)`$, $\omega^2=`r frm(l2_a$omega2, 3)`$. Mais la preuve est bien plus fragile : la valeur $p$ est passée de `r pp(l1_a$p)` à `r fr(l2_a$p, 3)`, et Tukey ne distingue plus A de C ($p=`r frm(tk2$p[2], 3)`$) alors que leurs moyennes de population diffèrent de 10 points. Avec une puissance d'environ 0,5, une étude sur deux de ce type manquerait l'effet global.
+:::
+
+## Laboratoire 3 : l'hétérogénéité problématique
+
+Utilisez le scénario des variances inégales : tailles **20; 30; 45**, moyennes 50, 54, 60, écarts-types 18, 10, 6. Le plus petit groupe a le plus grand écart-type.
+
+1. Documentez le diagnostic dans **Homogénéité des variances**.
+2. Comparez l'ANOVA classique et Welch dans **Tableau ANOVA**.
+3. Dans **A posteriori**, choisissez Games-Howell plutôt que Tukey et justifiez-le en une phrase.
+
+::: {.callout-tip collapse="true"}
+## Résultats attendus
+
+1. Écarts-types observés `r fr(het_a$s[1])`, `r fr(het_a$s[2])`, `r fr(het_a$s[3])` (rapport `r fr(max(het_a$s) / min(het_a$s))`); Levene $F(2, 92)=`r frm(lev_het[["F value"]])`$, $`r pvm(lev_het[["Pr(>F)"]])`$. L'application signale que le plus petit groupe est aussi le plus dispersé.
+2. Classique : $F(2, 92)=`r frm(het_a$F)`$; Welch : $F_W(2;\ `r frm(w_het$ddl2, 1)`)=`r frm(w_het$F)`$, $`r pvm(w_het$p)`$. Les deux concluent à une différence, mais seul Welch a un seuil fiable dans cette configuration (@fig-alpha-reel). Welch est le test à rapporter.
+3. Games-Howell : A et B, $p=`r frm(gh$p[1], 3)`$; A et C, $p=`r frm(gh$p[2], 3)`$; B et C, $p=`r frm(gh$p[3], 3)`$. Justification : « Les variances étant hétérogènes et les effectifs inégaux, les paires ont été comparées avec Games-Howell, qui estime une erreur type par paire, en cohérence avec le test de Welch. »
+:::
+
+## Laboratoire 4 : une hypothèse, pas toutes les paires
+
+Revenez au cas fil rouge. Imaginez que les deux premières modalités sont deux versions comparables d'un programme et que la troisième est une intervention enrichie. La question est : l'intervention enrichie surpasse-t-elle l'ensemble des deux versions ordinaires?
+
+1. Dans **Contrastes planifiés**, utilisez les coefficients $(-1,-1,2)$.
+2. Vérifiez la somme des coefficients et l'interprétation fournie par l'application.
+3. Expliquez pourquoi ce contraste est plus directement lié à l'hypothèse qu'une batterie aveugle de tests par paires.
+
+::: {.callout-tip collapse="true"}
+## Résultats attendus
+
+1. $\hat\psi=`r frm(c1$psi)`$, $t(87)=`r frm(c1$t)`$, $`r pvm(c1$p)`$, IC à 95 % [`r fr(c1$lo)` ; `r fr(c1$hi)`].
+2. La somme vaut 0; l'application décrit le contraste comme « Groupe C vs moyenne de Groupe A et Groupe B » et conclut que la moyenne de C est significativement plus élevée. En unités de Y : C dépasse la moyenne de A et B d'environ `r fr(c1$psi / 2, 1)` points.
+3. L'hypothèse porte sur une seule comparaison : enrichi contre ordinaire. Les trois paires de Tukey répondent à trois questions dont aucune n'est exactement celle-là, et elles paient une correction pour des questions que l'on ne se posait pas. Le contraste concentre toute la puissance sur la question d'intérêt et répond en un seul test.
+:::
+
+## Laboratoire 5 : des niveaux ordonnés
+
+Déclarez la VI **Quantitative / ordinale**, réglez $k=4$ niveaux de 30, moyennes 45, 50, 55, 60, écarts-types 10.
+
+1. Dans **A posteriori**, combien de paires Tukey déclare-t-il différentes?
+2. Dans **Tendance polynomiale**, quelle composante domine, et quelle part de SCE explique-t-elle?
+3. Laquelle des deux analyses décrit le mieux le phénomène?
+
+::: {.callout-tip collapse="true"}
+## Résultats attendus
+
+```{r}
+#| include: false
+tk_ord <- tukey(ord); n_sig <- sum(tk_ord$p < 0.05)
+lin <- contraste(ord, contr.poly(4)[, 1])
+```
+
+1. Tukey déclare `r n_sig` paires différentes sur 6; les niveaux voisins ne se distinguent pas.
+2. La composante linéaire : $t(116)=`r frm(lin$t)`$, $`r pvm(lin$p)`$, `r pc(lin$sc / ord_a$sce)` de SCE.
+3. La tendance : elle résume le phénomène en une phrase (« le score augmente régulièrement avec le niveau, d'environ 5 points par niveau ») là où les paires produisent une mosaïque de différences significatives et non significatives difficile à raconter.
+:::
+
+## Gabarit de compte rendu
+
+Dans un devoir ou un rapport, organisez votre réponse ainsi :
+
+1. **Question et plan** : facteur, niveaux, variable dépendante, assignation, tailles.
+2. **Description des groupes** : moyennes, écarts-types, graphique.
+3. **Diagnostic des postulats** : indépendance (plan), homogénéité (Levene, rapport des écarts-types), normalité (graphiques).
+4. **Test global retenu** : classique ou Welch, avec $F$, ddl et $p$.
+5. **Taille d'effet** : $\omega^2$ (ou $\eta^2$), interprétée dans le domaine.
+6. **Comparaisons ou contrastes justifiés** : procédure cohérente avec le test global.
+7. **Interprétation substantielle et limites** : portée causale, puissance, généralisation.
+
+Ce gabarit évite à la fois le résultat « $p<0{,}05$ » isolé et le compte rendu inutilement encyclopédique. Le chapitre suivant en donne des exemples rédigés.

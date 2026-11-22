@@ -1,0 +1,20 @@
+:root { --anova-navy:#082847; --anova-teal:#137983; --anova-gold:#d9a53b; --anova-paper:#f6f9fc; }
+
+.cover-image { max-width: 920px; margin: -1rem auto 3.5rem; }
+.cover-image img { display:block; width:100%; box-shadow:0 1rem 2.5rem rgba(0,0,0,.22); }
+.cover-epub img { width:100%; }
+.callout-note, .callout-tip, .callout-warning, .callout-important { border-radius:.4rem; }
+
+/* Encadrés pédagogiques (le titre est ajouté ici; en PDF par encadres.lua) */
+.case { background:var(--anova-paper); border-left:4px solid var(--anova-teal); padding:1rem 1.2rem; margin:1.3rem 0; }
+.case::before { content:"Cas fil rouge"; display:block; font-weight:700; color:var(--anova-teal); margin-bottom:.35rem; }
+.app-step { background:#fff8e9; border-left:4px solid var(--anova-gold); padding:.8rem 1rem; margin:1rem 0; }
+.app-step::before { content:"Dans l'application"; display:block; font-weight:700; color:#9a6b12; margin-bottom:.35rem; }
+.case > :last-child, .app-step > :last-child { margin-bottom:0; }
+
+/* Captures d'écran : léger cadre */
+img[src*="images/cap-"] { border:1px solid #d6dde4; border-radius:4px; }
+
+table { margin-bottom:1.2rem; }
+/* Page d accueil : la couverture remplace le bloc de titre */
+main:has(.cover-image) #title-block-header { display: none; }

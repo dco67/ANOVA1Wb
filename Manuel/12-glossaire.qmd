@@ -1,0 +1,76 @@
+# Glossaire {.unnumbered #sec-glossaire}
+
+**ANOVA à un facteur.** Modèle qui compare les moyennes d'une variable quantitative dans les niveaux d'un seul facteur, pour des groupes indépendants.
+
+**ANOVA de Welch.** Variante du test global qui n'exige pas l'égalité des variances; chaque moyenne est pondérée par $n_i/s_i^2$ et les degrés de liberté du dénominateur sont estimés. Particulièrement utile avec des tailles de groupes inégales.
+
+**Carré moyen (CM).** Somme des carrés divisée par ses degrés de liberté; il s'interprète comme une estimation de variance. $CM_E$ : entre groupes; $CM_R$ : résiduel (variance groupée).
+
+**Comparaisons a posteriori.** Comparaisons des moyennes deux à deux après un test global, avec une correction pour la multiplicité (Tukey, Holm, Games-Howell...).
+
+**Contraste.** Combinaison pondérée de moyennes dont les coefficients totalisent zéro, représentant une comparaison définie. Il est **planifié** s'il est formulé avant l'examen des données.
+
+**Contrastes orthogonaux.** Contrastes tels que $\sum c_id_i/n_i=0$; ils posent des questions sans recouvrement, et $k-1$ d'entre eux décomposent exactement SCE.
+
+**Degrés de liberté (ddl).** Nombre de quantités indépendantes disponibles pour estimer une source de variabilité : $k-1$ entre groupes, $N-k$ à l'intérieur, $N-1$ au total.
+
+**Effet de groupe ($\tau_i$).** Écart entre la moyenne de population du groupe $i$ et la moyenne générale : $\tau_i=\mu_i-\mu$.
+
+**Erreur type.** Écart-type d'une statistique d'un échantillon à l'autre; pour une moyenne, $\sigma/\sqrt n$.
+
+**Espérance des carrés moyens.** Valeur moyenne d'un carré moyen sur un grand nombre d'échantillons : $E(CM_R)=\sigma^2$ et $E(CM_E)=\sigma^2+\sum n_i\tau_i^2/(k-1)$.
+
+**Éta carré ($\eta^2$).** Proportion de SCT associée au facteur dans l'échantillon, $\mathrm{SCE}/\mathrm{SCT}$; biaisé vers le haut.
+
+**$f$ de Cohen.** Écart-type des moyennes de population en unités d'écart-type intra-groupe; indice des calculs de puissance.
+
+**Games-Howell.** Comparaisons par paires sans variance commune : une erreur type et des ddl de Welch pour chaque paire.
+
+**Graine.** Point de départ du générateur aléatoire; la même graine reproduit exactement le même échantillon.
+
+**Homoscédasticité.** Égalité des variances de population dans les groupes.
+
+**Kruskal-Wallis.** Test fondé sur les rangs, alternative non paramétrique à l'ANOVA à un facteur; il compare des distributions et ne se lit comme un test de médianes que si les formes sont semblables.
+
+**Levene (test de).** ANOVA sur les écarts absolus des observations à la médiane (Brown-Forsythe) ou à la moyenne de leur groupe; test de l'homogénéité des variances.
+
+**Oméga carré ($\omega^2$).** Estimation de la proportion de variance due au facteur dans la population, corrigée du biais de $\eta^2$.
+
+**Paramètre de non-centralité ($\lambda$).** Mesure de l'écart à $H_0$ dans un plan donné, $\lambda=\sum n_i\tau_i^2/\sigma^2=Nf^2$; il détermine la loi de $F$ sous $H_1$, donc la puissance.
+
+**Puissance.** Probabilité de rejeter $H_0$ lorsqu'un effet d'une taille spécifiée existe, dans un plan donné.
+
+**Résidu.** Écart d'une observation à la moyenne de son groupe, $Y_{ij}-\bar Y_{i.}$.
+
+**Somme des carrés (SC).** Somme de distances au carré servant à mesurer la variabilité : SCT (totale), SCE (entre groupes), SCR (résiduelle).
+
+**Taille d'effet.** Indice de l'ampleur d'une différence ou d'une association, distinct de sa significativité statistique.
+
+**Taux d'erreur par famille (FWER).** Probabilité de commettre au moins une erreur de première espèce dans une famille de comparaisons.
+
+**Taux de fausses découvertes (FDR).** Proportion attendue de fausses découvertes parmi les différences déclarées; contrôlé par Benjamini-Hochberg.
+
+**Tendance polynomiale.** Décomposition de SCE en composantes linéaire, quadratique, cubique, etc., pour des niveaux ordonnés.
+
+**Tukey HSD.** Procédure de comparaison de toutes les paires fondée sur l'étendue studentisée; référence lorsque les variances sont homogènes.
+
+## Du manuel à l'écran
+
+| Dans le manuel | Dans l'application |
+|:--|:--|
+| $k$, $n$ | **Groupes (k)**, **n par groupe** |
+| Tailles inégales | **Ou tailles précises (ex. 20; 30; 45)** ou **Déséquilibre aléatoire ± n** |
+| Nouvel échantillon du même scénario | **🎲 Nouvel échantillon** (change la graine) |
+| $\mu_i$, $\sigma_i$ | curseurs μ et σ de **Gr. A**, **Gr. B**... |
+| $V_{\text{inter}}$, $V_{\text{intra}}$ | **Données ▸ Conception** |
+| $\bar Y_i$, $s_i$, erreur type | **Données ▸ Données simulées**, tableau descriptif |
+| Normalité, homogénéité, indépendance, Kruskal-Wallis | **Données ▸ Postulats** (quatre sous-onglets) |
+| SCT, SCE, SCR | **Analyse ▸ Décomposition** |
+| Tableau ANOVA, $F$, Welch | **Analyse ▸ Tableau ANOVA** |
+| Tukey, Holm, Games-Howell... | **Analyse ▸ Comparaisons ▸ A posteriori** |
+| Codages standards | **Analyse ▸ Comparaisons ▸ Contrastes standards** |
+| Tendance polynomiale | **Analyse ▸ Comparaisons ▸ Tendance polynomiale** |
+| Contrastes planifiés | **Analyse ▸ Comparaisons ▸ Contrastes planifiés** |
+| $\eta^2$, $\omega^2$, $f$, puissance | **Analyse ▸ Taille d'effet & Puissance** |
+
+: Correspondance entre les notions du manuel et l'application. {#tbl-ecran}
